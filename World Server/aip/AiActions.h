@@ -1,22 +1,47 @@
 // Props to ExJam for this code :D
 #define AIACT(act) int F_AI_ACT_ ## act (class CWorldServer* server, class CCharacter* entity, byte* raw)
-typedef int (*fpAiAct)(class CWorldServer*, class CCharacter*, byte*);
+typedef int (*fpAiAct)(class CWorldServer *, class CCharacter *, byte *);
 #define GETAIACTDATA(act) STR_AI_ACT_ ## act * data = (STR_AI_ACT_ ## act *)raw;
 
 
-AIACT(000);AIACT(001);AIACT(002);
-AIACT(003);AIACT(004);AIACT(005);
-AIACT(006);AIACT(007);AIACT(008);
-AIACT(009);AIACT(010);AIACT(011);
-AIACT(012);AIACT(013);AIACT(014);
-AIACT(015);AIACT(016);AIACT(017);
-AIACT(018);AIACT(019);AIACT(020);
-AIACT(021);AIACT(022);AIACT(023);
-AIACT(024);AIACT(025);AIACT(026);
-AIACT(027);AIACT(028);AIACT(029);
-AIACT(030);AIACT(031);AIACT(032);
-AIACT(033);AIACT(034);AIACT(035);
-AIACT(036);AIACT(037);
+AIACT(000);
+AIACT(001);
+AIACT(002);
+AIACT(003);
+AIACT(004);
+AIACT(005);
+AIACT(006);
+AIACT(007);
+AIACT(008);
+AIACT(009);
+AIACT(010);
+AIACT(011);
+AIACT(012);
+AIACT(013);
+AIACT(014);
+AIACT(015);
+AIACT(016);
+AIACT(017);
+AIACT(018);
+AIACT(019);
+AIACT(020);
+AIACT(021);
+AIACT(022);
+AIACT(023);
+AIACT(024);
+AIACT(025);
+AIACT(026);
+AIACT(027);
+AIACT(028);
+AIACT(029);
+AIACT(030);
+AIACT(031);
+AIACT(032);
+AIACT(033);
+AIACT(034);
+AIACT(035);
+AIACT(036);
+AIACT(037);
 
 #define AI_ACT_COUNT 38
 
@@ -151,24 +176,30 @@ struct STR_AI_ACT_024 {
 
 struct STR_AI_ACT_025 {
 	//Set Variable (1) (0x0c bytes)
-	union{byte btVarIDX;	//Pos: 0x00
-	char cVarIdx[4];};
+	union {
+		byte btVarIDX;	//Pos: 0x00
+		char cVarIdx[4];
+	};
 	dword iValue;	//Pos: 0x04
 	byte btOp;	//Pos: 0x08
 };
 
 struct STR_AI_ACT_026 {
 	//Set Variable (2) (0x00 bytes)
-	union{word nVarNo;	//Pos: 0x00
-	char cVarNo[4];};
+	union {
+		word nVarNo;	//Pos: 0x00
+		char cVarNo[4];
+	};
 	dword iValue;	//Pos: 0x04
 	byte btOp;	//Pos: 0x08
 };
 
 struct STR_AI_ACT_027 {
 	//Set Variable (3) (0x00 bytes)
-	union{word nVarNo;	//Pos: 0x00
-	char cVarNo[4];};
+	union {
+		word nVarNo;	//Pos: 0x00
+		char cVarNo[4];
+	};
 	dword iValue;	//Pos: 0x04
 	byte btOp;	//Pos: 0x08
 };
@@ -189,7 +220,7 @@ struct STR_AI_ACT_029 {
 struct STR_AI_ACT_030 {
 	//Do Trigger (0x0d bytes)
 	word lenszTrigger;	//Pos: 0x00
-	char* szTrigger;	//Pos: 0x02
+	char *szTrigger;	//Pos: 0x02
 };
 
 struct STR_AI_ACT_031 {
@@ -214,8 +245,10 @@ struct STR_AI_ACT_034 {
 
 struct STR_AI_ACT_035 {
 	//Set Variable (4) (0x0c bytes)
-	union{word nVarIDX;	//Pos: 0x00
-	char cVarIdx[4];};
+	union {
+		word nVarIDX;	//Pos: 0x00
+		char cVarIdx[4];
+	};
 	dword iValue;	//Pos: 0x04
 	byte btOp;	//Pos: 0x08
 };

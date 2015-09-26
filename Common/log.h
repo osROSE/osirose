@@ -1,17 +1,17 @@
 /*
     Open Source Rose Online Team - http://osroseon.to.md/
-    note: the Server is develop with erose source server + eich source        
+    note: the Server is develop with erose source server + eich source
 */
 #ifndef __ROSE_LOGGING_FUNCTIONS__
 #define __ROSE_LOGGING_FUNCTIONS__
 
 // Log path
 #ifdef _WIN32
-#	define LOG_DIRECTORY "log/"
+	#define LOG_DIRECTORY "log/"
 #endif
 
 #ifdef __unix__
-#	define LOG_DIRECTORY "/var/log/roseserver/"
+	#define LOG_DIRECTORY "/var/log/roseserver/"
 #endif
 
 #define LOG_LOGIN_SERVER		0x01
@@ -52,6 +52,6 @@ enum msg_type {
 };
 
 // Logging function
-void Log( msg_type flag, char* Format, ... );
+void Log(msg_type flag, char *Format, ...);
 
 #endif

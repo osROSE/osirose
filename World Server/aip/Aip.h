@@ -4,16 +4,16 @@ public:
 	struct SAipDatum {
 		int size;
 		int opcode;
-		byte* data;
+		byte *data;
 	};
 
 	dword AipID;
 
 	dword ConditionCount;
-	SAipDatum** Conditions;
+	SAipDatum **Conditions;
 
 	dword ActionCount;
-	SAipDatum** Actions;
+	SAipDatum **Actions;
 private:
 };
 #define AI_FAILURE 8

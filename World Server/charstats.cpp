@@ -21,80 +21,67 @@
 #include "character.h"
 
 // virtual [return attackpower]
-unsigned int CCharacter::GetAttackPower( )
-{
-    return 0;
+unsigned int CCharacter::GetAttackPower() {
+	return 0;
 }
 
 // virtual [return defense]
-unsigned int CCharacter::GetDefense( )
-{
-    return 0;
+unsigned int CCharacter::GetDefense() {
+	return 0;
 }
 
 // virtual [return dodge]
-unsigned int CCharacter::GetDodge( )
-{
-    return 0;
+unsigned int CCharacter::GetDodge() {
+	return 0;
 }
 
 // virtual [return xprate]
-unsigned int CCharacter::GetXPRate( )
-{
-    return 0;
+unsigned int CCharacter::GetXPRate() {
+	return 0;
 }
 
 // virtual [return accury]
-unsigned int CCharacter::GetAccury( )
-{
-    return 0;
+unsigned int CCharacter::GetAccury() {
+	return 0;
 }
 
 // virtual [return magic defense]
-unsigned int CCharacter::GetMagicDefense( )
-{
-    return 0;
+unsigned int CCharacter::GetMagicDefense() {
+	return 0;
 }
 
 // virtual [return magic attack]
-unsigned int CCharacter::GetMagicAttack( )
-{
-    return 0;
+unsigned int CCharacter::GetMagicAttack() {
+	return 0;
 }
 
 // virtual [return critical]
-unsigned int CCharacter::GetCritical( )
-{
-    return 0;
+unsigned int CCharacter::GetCritical() {
+	return 0;
 }
 
 // virtual [return attackspeed]
-unsigned int CCharacter::GetAttackSpeed( )
-{
-    return 0;
+unsigned int CCharacter::GetAttackSpeed() {
+	return 0;
 }
 
 // virtual [return movespeed]
-unsigned int CCharacter::GetMoveSpeed( )
-{
-    return 0;
+unsigned int CCharacter::GetMoveSpeed() {
+	return 0;
 }
 
 // virtual [return maxhp]
-unsigned int CCharacter::GetMaxHP( )
-{
-    return 0;
+unsigned int CCharacter::GetMaxHP() {
+	return 0;
 }
 
 // virtual [return maxmp]
-unsigned int CCharacter::GetMaxMP( )
-{
-    return 0;
+unsigned int CCharacter::GetMaxMP() {
+	return 0;
 }
 
 // virtual [return attackdistance]
-float CCharacter::GetAttackDistance( )
-{
-    return 0;
+float CCharacter::GetAttackDistance() {
+	return 0;
 }
 

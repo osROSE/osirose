@@ -1,79 +1,82 @@
 // Props to ExJam for this code :D
 #include "../WorldServer.h"
 
-void CWorldServer::ReadQSD(strings path, dword index){	
-	CRoseFile* fh = new CRoseFile(path, FM_READ | FM_BINARY);
-	if(fh->IsOpen()) { // goto done;
+void CWorldServer::ReadQSD(strings path, dword index) {
+	CRoseFile *fh = new CRoseFile(path, FM_READ | FM_BINARY);
 
-	Log(MSG_LOAD, "Loading %s                              ", path);
-
-	fh->Seek(4, SEEK_CUR);
-	dword BlockCount = fh->Get<dword>();
-	fh->Seek(fh->Get<word>(), SEEK_CUR);
-	for(dword i = 0; i < BlockCount; i++){
-		dword RecordCount = fh->Get<dword>();
+	if (fh->IsOpen()) { // goto done;
+		Log(MSG_LOAD, "Loading %s                              ", path);
+		fh->Seek(4, SEEK_CUR);
+		dword BlockCount = fh->Get<dword>();
 		fh->Seek(fh->Get<word>(), SEEK_CUR);
-		for(dword j = 0; j < RecordCount; j++){
-			CQuestTrigger* trigger = new CQuestTrigger();
-			trigger->id=((index*0x10000)+(i*0x100)+j);
-			trigger->CheckNext = fh->Get<byte>();
-			trigger->ConditionCount = fh->Get<dword>();
-			trigger->ActionCount = fh->Get<dword>();
-			dword len = fh->Get<word>();
-			trigger->TriggerName = new char[len+1];
-			fh->Read(trigger->TriggerName, len, 1);
-			trigger->TriggerName[len] = 0;
 
-			if(trigger->ConditionCount > 0){
-				trigger->Conditions = new CQuestTrigger::SQuestDatum*[trigger->ConditionCount];
-				for(dword k = 0; k < trigger->ConditionCount; k++){
-					CQuestTrigger::SQuestDatum* data = new CQuestTrigger::SQuestDatum();
-					data->size = fh->Get<int>();
-					data->opcode = fh->Get<int>();
-					data->data = new byte[data->size - 8];
-					fh->Read(data->data, data->size - 8, 1);
-					trigger->Conditions[k] = data;
+		for (dword i = 0; i < BlockCount; i++) {
+			dword RecordCount = fh->Get<dword>();
+			fh->Seek(fh->Get<word>(), SEEK_CUR);
+
+			for (dword j = 0; j < RecordCount; j++) {
+				CQuestTrigger *trigger = new CQuestTrigger();
+				trigger->id = ((index * 0x10000) + (i * 0x100) + j);
+				trigger->CheckNext = fh->Get<byte>();
+				trigger->ConditionCount = fh->Get<dword>();
+				trigger->ActionCount = fh->Get<dword>();
+				dword len = fh->Get<word>();
+				trigger->TriggerName = new char[len + 1];
+				fh->Read(trigger->TriggerName, len, 1);
+				trigger->TriggerName[len] = 0;
+
+				if (trigger->ConditionCount > 0) {
+					trigger->Conditions = new CQuestTrigger::SQuestDatum*[trigger->ConditionCount];
+
+					for (dword k = 0; k < trigger->ConditionCount; k++) {
+						CQuestTrigger::SQuestDatum *data = new CQuestTrigger::SQuestDatum();
+						data->size = fh->Get<int>();
+						data->opcode = fh->Get<int>();
+						data->data = new byte[data->size - 8];
+						fh->Read(data->data, data->size - 8, 1);
+						trigger->Conditions[k] = data;
+					}
+				} else {
+					trigger->Conditions = NULL;
 				}
-			}else{
-				trigger->Conditions = NULL;
-			}
 
-			if(trigger->ActionCount > 0){
-				trigger->Actions = new CQuestTrigger::SQuestDatum*[trigger->ActionCount];
-				for(dword k = 0; k < trigger->ActionCount; k++){
-					CQuestTrigger::SQuestDatum* data = new CQuestTrigger::SQuestDatum();
-					data->size = fh->Get<int>();
-					data->opcode = fh->Get<int>() - 0x01000000;
-					data->data = new byte[data->size - 8];
-					fh->Read(data->data, data->size - 8, 1);
-					trigger->Actions[k] = data;
+				if (trigger->ActionCount > 0) {
+					trigger->Actions = new CQuestTrigger::SQuestDatum*[trigger->ActionCount];
+
+					for (dword k = 0; k < trigger->ActionCount; k++) {
+						CQuestTrigger::SQuestDatum *data = new CQuestTrigger::SQuestDatum();
+						data->size = fh->Get<int>();
+						data->opcode = fh->Get<int>() - 0x01000000;
+						data->data = new byte[data->size - 8];
+						fh->Read(data->data, data->size - 8, 1);
+						trigger->Actions[k] = data;
+					}
+				} else {
+					trigger->Actions = NULL;
 				}
-			}else{
-				trigger->Actions = NULL;
-			}
 
-			trigger->TriggerHash = MakeStrHash(trigger->TriggerName);
-			TriggerList.push_back( trigger );
+				trigger->TriggerHash = MakeStrHash(trigger->TriggerName);
+				TriggerList.push_back(trigger);
+			}
 		}
+	} else {
+		Log(MSG_ERROR, "QSD File: '%s'", path);
 	}
-}else
-     Log( MSG_ERROR, "QSD File: '%s'", path );
-     
-    fh->Close();
+
+	fh->Close();
 	delete fh;
 }
 
-void CWorldServer::LoadQuestData(){
-	CStrStb* stbQuest = new CStrStb("3DDATA\\STB\\LIST_QUESTDATA.STB");
-	
-	for(dword i = 1; i < stbQuest->Rows(); i++){
-		if(stbQuest->Data(i, 0)){
-			GServer->ReadQSD(stbQuest->Data(i, 0),i);
+void CWorldServer::LoadQuestData() {
+	CStrStb *stbQuest = new CStrStb("3DDATA\\STB\\LIST_QUESTDATA.STB");
+
+	for (dword i = 1; i < stbQuest->Rows(); i++) {
+		if (stbQuest->Data(i, 0)) {
+			GServer->ReadQSD(stbQuest->Data(i, 0), i);
 		}
 	}
 
 	Log(MSG_INFO, "Finished loading quest data                              ");
-
 	qstCondFunc[0] = &QUEST_COND_000;
 	qstCondFunc[1] = &QUEST_COND_001;
 	qstCondFunc[2] = &QUEST_COND_002;
@@ -105,7 +108,6 @@ void CWorldServer::LoadQuestData(){
 	qstCondFunc[28] = &QUEST_COND_028;
 	qstCondFunc[29] = &QUEST_COND_029;
 	qstCondFunc[30] = &QUEST_COND_030;
-
 	qstRewdFunc[0] = &QUEST_REWD_000;
 	qstRewdFunc[1] = &QUEST_REWD_001;
 	qstRewdFunc[2] = &QUEST_REWD_002;
@@ -135,6 +137,5 @@ void CWorldServer::LoadQuestData(){
 	qstRewdFunc[26] = &QUEST_REWD_026;
 	qstRewdFunc[27] = &QUEST_REWD_027;
 	qstRewdFunc[28] = &QUEST_REWD_028;
-
 	delete stbQuest;
 }

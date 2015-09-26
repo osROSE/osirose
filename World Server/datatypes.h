@@ -474,153 +474,142 @@
 #include "../common/sockets.h"
 
 // Hold party experience when kill a moster
-struct CPartyExp
-{
-    class CParty* thisparty;
-    UINT exp;
-    UINT num;
-    UINT partymember[50];
-    UINT maxlevel;
-    bool flag;
+struct CPartyExp {
+	class CParty *thisparty;
+	UINT exp;
+	UINT num;
+	UINT partymember[50];
+	UINT maxlevel;
+	bool flag;
 };
 
 // Equip information
-struct CEquip
-{
-    UINT id;
-    UINT itemtype;
-    UINT equiptype;
-    UINT type;
-    UINT price;
-    UINT pricerate;
-    UINT weight;
-    UINT quality;
-    UINT level;
-    UINT material;
-    UINT occupation[4];
-    UINT condition1[3];
-    UINT condition2[3];
-    UINT stat1[3];
-    UINT stat2[3];
-    UINT defense;
-    UINT magicresistence;
-    UINT attackdistance;
-    UINT attackpower;
-    UINT attackspeed;
-    UINT magicattack;
-    UINT itemgrade;
-    UINT movespeed;
-    UINT raretype;
-    UINT unionpoint;
+struct CEquip {
+	UINT id;
+	UINT itemtype;
+	UINT equiptype;
+	UINT type;
+	UINT price;
+	UINT pricerate;
+	UINT weight;
+	UINT quality;
+	UINT level;
+	UINT material;
+	UINT occupation[4];
+	UINT condition1[3];
+	UINT condition2[3];
+	UINT stat1[3];
+	UINT stat2[3];
+	UINT defense;
+	UINT magicresistence;
+	UINT attackdistance;
+	UINT attackpower;
+	UINT attackspeed;
+	UINT magicattack;
+	UINT itemgrade;
+	UINT movespeed;
+	UINT raretype;
+	UINT unionpoint;
 };
 
 // Jem Data
-struct CJemData
-{
-    UINT id;
-    UINT itemtype;
-    UINT type;
-    UINT price;
-    UINT pricerate;
-    UINT weight;
-    UINT quality;
-    UINT material;
-    UINT stat1[2];/**/
-    UINT stat2[2];/**/
+struct CJemData {
+	UINT id;
+	UINT itemtype;
+	UINT type;
+	UINT price;
+	UINT pricerate;
+	UINT weight;
+	UINT quality;
+	UINT material;
+	UINT stat1[2];/**/
+	UINT stat2[2];/**/
 };
 
 // natural data
-struct CNaturalData
-{
-    UINT id;
-    UINT itemtype;
-    UINT type;
-    UINT price;
-    UINT pricerate;
-    UINT weight;
-    UINT quality;
-    UINT pricevalue;
+struct CNaturalData {
+	UINT id;
+	UINT itemtype;
+	UINT type;
+	UINT price;
+	UINT pricerate;
+	UINT weight;
+	UINT quality;
+	UINT pricevalue;
 };
 
 // pat data
-struct CPatData
-{
-    UINT id;
-    UINT itemtype;
-    UINT type;
-    UINT price;
-    UINT pricerate;
-    UINT weight;
-    UINT quality;
-    UINT material;
-    UINT partversion;
-    UINT level;
-    UINT condition[2];
-    UINT modifier[2];
-    UINT maxfuel;
-    UINT fuelcons;
-    UINT speed;
-    UINT attackdistance;
-    UINT attackpower;
-    UINT attackspeed;
+struct CPatData {
+	UINT id;
+	UINT itemtype;
+	UINT type;
+	UINT price;
+	UINT pricerate;
+	UINT weight;
+	UINT quality;
+	UINT material;
+	UINT partversion;
+	UINT level;
+	UINT condition[2];
+	UINT modifier[2];
+	UINT maxfuel;
+	UINT fuelcons;
+	UINT speed;
+	UINT attackdistance;
+	UINT attackpower;
+	UINT attackspeed;
 };
 
-struct CProductData
-{
-    UINT id;
-    UINT item[50];
-    UINT amount[50];
+struct CProductData {
+	UINT id;
+	UINT item[50];
+	UINT amount[50];
 };
 
-struct CCSellData
-{
-    UINT id;
-    UINT item[49];
+struct CCSellData {
+	UINT id;
+	UINT item[49];
 };
 
-struct CUseData
-{
-    UINT id;;
-    UINT restriction;
-    UINT type;
-    UINT price;
-    UINT pricerate;
-    UINT weight;
-    UINT quality;
-    UINT usecondition[2];
-    UINT useeffect[2];
-    UINT pricevalue;
+struct CUseData {
+	UINT id;;
+	UINT restriction;
+	UINT type;
+	UINT price;
+	UINT pricerate;
+	UINT weight;
+	UINT quality;
+	UINT usecondition[2];
+	UINT useeffect[2];
+	UINT pricevalue;
 };
 
-struct CVector2D
-{
+struct CVector2D {
 	CVector2D() : x(0), y(0) {}
 	CVector2D(dword nX, dword nY) : x(nX), y(nY) {}
 	dword x, y;
 
-	bool operator == ( const CVector2D& otherpoint ){
+	bool operator == (const CVector2D &otherpoint) {
 		return (x == otherpoint.x) && (y == otherpoint.y);
 	}
 
-	bool operator != ( const CVector2D& otherpoint ){
+	bool operator != (const CVector2D &otherpoint) {
 		return (x != otherpoint.x) || (y != otherpoint.y);
 	}
 };
 
-struct CVector2F
-{
+struct CVector2F {
 	CVector2F() : x(0), y(0) {}
 	CVector2F(float nX, float nY) : x(nX), y(nY) {}
 	float x, y;
 
-	bool operator == ( const CVector2F& otherpoint )
-	{
-		return (fabs(this->x-otherpoint.x)<0.001f && fabs(this->y-otherpoint.y)<0.001f);
+	bool operator == (const CVector2F &otherpoint) {
+		return (fabs(this->x - otherpoint.x) < 0.001f
+		        && fabs(this->y - otherpoint.y) < 0.001f);
 	}
 };
 
-struct SBasic
-{
+struct SBasic {
 	word exp;
 	word map;
 	CVector2F pos;
@@ -637,47 +626,47 @@ struct fPoint {
 
 // List Mob Data
 struct CNPCData {
-    UINT id;
-    UINT life;
-    UINT wspeed;
-    UINT rspeed;
-    BYTE stance;
-    UINT dspeed;
-    UINT weapon;
-    UINT subweapon;
-    UINT level;
-    UINT hp;
-    UINT atkpower;
-    UINT hitrate;
-    UINT defense;
-    UINT magicdefense;
-    UINT dodge;
-    float atkspeed;
-    UINT magicattack;
-    UINT AI;
-    UINT exp;
-  	UINT dropid;
-  	UINT money;
-  	UINT item;
-  	UINT tab1;
-  	UINT tab2;
-  	UINT tab3;
-  	UINT specialtab;
-    float atkdistance;
-    UINT aggresive;
-    UINT shp;
-    UINT dialogid;
+	UINT id;
+	UINT life;
+	UINT wspeed;
+	UINT rspeed;
+	BYTE stance;
+	UINT dspeed;
+	UINT weapon;
+	UINT subweapon;
+	UINT level;
+	UINT hp;
+	UINT atkpower;
+	UINT hitrate;
+	UINT defense;
+	UINT magicdefense;
+	UINT dodge;
+	float atkspeed;
+	UINT magicattack;
+	UINT AI;
+	UINT exp;
+	UINT dropid;
+	UINT money;
+	UINT item;
+	UINT tab1;
+	UINT tab2;
+	UINT tab3;
+	UINT specialtab;
+	float atkdistance;
+	UINT aggresive;
+	UINT shp;
+	UINT dialogid;
 
-    UINT side;
-    UINT sidechance;
-    UINT zulydrop;
-    UINT mapdrop;
-    UINT mobdrop;
-    UINT leveldrop;
-    UINT dropchance;
+	UINT side;
+	UINT sidechance;
+	UINT zulydrop;
+	UINT mapdrop;
+	UINT mobdrop;
+	UINT leveldrop;
+	UINT dropchance;
 
-    dword EventID;
-    SBasic basic;
+	dword EventID;
+	SBasic basic;
 	bool IsMoving;
 	CVector2F newPos;
 	CVector2D lastBlock;
@@ -686,115 +675,105 @@ struct CNPCData {
 };
 
 // Store the damage for monster to give exp
-struct MonsterDamage
-{
-    UINT charid;
-    long int damage;
+struct MonsterDamage {
+	UINT charid;
+	long int damage;
 };
 
-struct CDropInfo
-{
-    BYTE type;
-    DWORD item;
-    QWORD prob;
+struct CDropInfo {
+	BYTE type;
+	DWORD item;
+	QWORD prob;
 };
 
 // For store the drops info
-struct CMDrops
-{
-    UINT id;
-    UINT zuly;
-    UINT zulyprob;
-    vector<CDropInfo*> Drops;
-    UINT level_min;//for map drops
-    UINT level_max;//for map drops
-    UINT level_boss;//for map drops
-    UINT probmax;
+struct CMDrops {
+	UINT id;
+	UINT zuly;
+	UINT zulyprob;
+	vector<CDropInfo *> Drops;
+	UINT level_min;//for map drops
+	UINT level_max;//for map drops
+	UINT level_boss;//for map drops
+	UINT probmax;
 
-    UINT prob;
-    UINT map;
-    UINT mob;
-    UINT itemtype;
-    UINT itemnum;
-    UINT alt[8];
+	UINT prob;
+	UINT map;
+	UINT mob;
+	UINT itemtype;
+	UINT itemnum;
+	UINT alt[8];
 
 };
 
 // For store the Buff info
-struct CBuff
-{
-    unsigned int Buff;//store the buff type
-    unsigned int value1;//buff value 1 (direct)
-    unsigned int value2;//buff value 2 (%)
-    unsigned int Evalue;//Extra value 1 (buffer int +)
-    unsigned int Duration; //Skill Duration
-    clock_t bufftime;//Buff Time
-};
-
-// -----------------------------------------------------------------------------------------
-// For store the Buff info
-// -----------------------------------------------------------------------------------------
-struct CBuffValue
-{
-    int value1;
-    int value2;
-    int value3;
+struct CBuff {
+	unsigned int Buff;//store the buff type
+	unsigned int value1;//buff value 1 (direct)
+	unsigned int value2;//buff value 2 (%)
+	unsigned int Evalue;//Extra value 1 (buffer int +)
+	unsigned int Duration; //Skill Duration
+	clock_t bufftime;//Buff Time
 };
 
 // -----------------------------------------------------------------------------------------
 // For store the Buff info
 // -----------------------------------------------------------------------------------------
-struct CPSkill
-{
-    int buff[3];//Buff type
-    int value1[3];
-    int value2[3];
+struct CBuffValue {
+	int value1;
+	int value2;
+	int value3;
+};
+
+// -----------------------------------------------------------------------------------------
+// For store the Buff info
+// -----------------------------------------------------------------------------------------
+struct CPSkill {
+	int buff[3];//Buff type
+	int value1[3];
+	int value2[3];
 };
 
 // -----------------------------------------------------------------------------------------
 // For store the clan info
 // -----------------------------------------------------------------------------------------
-struct SClan
-{
-    int id;
-    int logo;
-    int back;
-    int grade;
-    int cp;
-    char name[50];
-    char slogan[100];
-    char news[200];
+struct SClan {
+	int id;
+	int logo;
+	int back;
+	int grade;
+	int cp;
+	char name[50];
+	char slogan[100];
+	char news[200];
 };
 
 // -----------------------------------------------------------------------------------------
 // GM Respawn Mobs  (50 points max)
 // -----------------------------------------------------------------------------------------
-struct CRespawnPoints
-{
-    int d;//flag to duplicate
-    int b;//flag to store
-    int n;//num points
-    int min;//mob min
-    int max;//mob max
-    int map;//map
-    int mobID;//mob id
-    int respawntime;//respawn time
-    fPoint points[50];//points
+struct CRespawnPoints {
+	int d;//flag to duplicate
+	int b;//flag to store
+	int n;//num points
+	int min;//mob min
+	int max;//mob max
+	int map;//map
+	int mobID;//mob id
+	int respawntime;//respawn time
+	fPoint points[50];//points
 };
 
 // -----------------------------------------------------------------------------------------
 // An item that a client owns
 // -----------------------------------------------------------------------------------------
-class CItem
-{
+class CItem {
 public:
-    unsigned short GetPakHeader( );
-	unsigned GetPakData( );
-	unsigned GetVisInfo( );
-	void Clear( );
+	unsigned short GetPakHeader();
+	unsigned GetPakData();
+	unsigned GetVisInfo();
+	void Clear();
 
-	inline bool IsStackable()
-	{
+	inline bool IsStackable() {
 		return (itemtype >= 10) && (itemtype <= 13);
 	};
 	unsigned		itemnum;
@@ -815,11 +794,11 @@ public:
 // Selling / buying items
 // -----------------------------------------------------------------------------------------
 struct BSItem {
-    int slot;
-    int count;
-    long int price;
-    int head;
-    int data;
+	int slot;
+	int count;
+	long int price;
+	int head;
+	int data;
 };
 
 // -----------------------------------------------------------------------------------------
@@ -831,12 +810,15 @@ struct CNPC {
 	unsigned npctype;
 	fPoint pos;
 	float dir;
-	CNPCData* thisnpc;
+	CNPCData *thisnpc;
 };
 
 struct SWarp {
-	SWarp() : TargetPoint(0), TargetMap(0), SourceMap(0){pos.x = 0; pos.y = 0;}
-	~SWarp(){}
+	SWarp() : TargetPoint(0), TargetMap(0), SourceMap(0) {
+		pos.x = 0;
+		pos.y = 0;
+	}
+	~SWarp() {}
 
 	CVector2F pos;
 	dword SourceMap;
@@ -851,86 +833,82 @@ struct SZonPoint {
 };
 
 // Item data object
-struct CItemData
-{
+struct CItemData {
 	unsigned type;
 	unsigned id;
 };
 
 // Structure for holding loaded STB data
 
-struct CNPCTrigger
-{
+struct CNPCTrigger {
 	unsigned hash;
 	unsigned char linkcount;
 	unsigned char conditioncount;
 	unsigned char rewardcount;
-	unsigned* links;
-	unsigned char** actions;
+	unsigned *links;
+	unsigned char **actions;
 };
 
 // -----------------------------------------------------------------------------------------
 // Skill Data
 // -----------------------------------------------------------------------------------------
 struct CSkills {
-    UINT id;
-    UINT level;
-    UINT type;
-    UINT skilltype; // New
-    UINT range;
-    UINT target;
-    UINT status[2]; // New
-    UINT aoerange; // New
-    UINT successrate; // New
-    UINT costtype[2]; // New
-    UINT costamount[2]; // New
-    UINT duration;
-    UINT atkpower;
-    UINT mp;
-    UINT costtype2; // New
-    UINT costamount2; // New
-    UINT cooldown; // New
-    UINT weapon[5];
-    UINT rskill[3];
-    UINT lskill[3];
-    UINT c_class[4];
-    UINT req[2]; // New
-    UINT reqam[2]; // New
-    UINT zuly;   // New
-    UINT clevel;
-    UINT success;
-    UINT sp;
-    UINT buff[3];
-    UINT value1[3];
-    UINT value2[3];
-    UINT nbuffs;
-    unsigned short int aoe;
-    UINT aoeradius;
-    UINT script;
-    UINT svalue1;
+	UINT id;
+	UINT level;
+	UINT type;
+	UINT skilltype; // New
+	UINT range;
+	UINT target;
+	UINT status[2]; // New
+	UINT aoerange; // New
+	UINT successrate; // New
+	UINT costtype[2]; // New
+	UINT costamount[2]; // New
+	UINT duration;
+	UINT atkpower;
+	UINT mp;
+	UINT costtype2; // New
+	UINT costamount2; // New
+	UINT cooldown; // New
+	UINT weapon[5];
+	UINT rskill[3];
+	UINT lskill[3];
+	UINT c_class[4];
+	UINT req[2]; // New
+	UINT reqam[2]; // New
+	UINT zuly;   // New
+	UINT clevel;
+	UINT success;
+	UINT sp;
+	UINT buff[3];
+	UINT value1[3];
+	UINT value2[3];
+	UINT nbuffs;
+	unsigned short int aoe;
+	UINT aoeradius;
+	UINT script;
+	UINT svalue1;
 };
 
 // -----------------------------------------------------------------------------------------
 // Status Object
 // -----------------------------------------------------------------------------------------
-struct CStatus
-{
-  UINT id; //
-  UINT type; // Unk [1]
-  UINT duplication; // Unk [2]
-  UINT dir; // 0: Up 1: Down 2: ? [3]
-  UINT repeat; // 1: Repeat 2: Once 3: Special [4]
-  UINT ability[2]; // Status # to call? [5][7]
-  UINT amount[2]; // # to increase/decrease by? [6][8]
-  UINT decrease; // 1: decrease 0: increase [17]
+struct CStatus {
+	UINT id; //
+	UINT type; // Unk [1]
+	UINT duplication; // Unk [2]
+	UINT dir; // 0: Up 1: Down 2: ? [3]
+	UINT repeat; // 1: Repeat 2: Once 3: Special [4]
+	UINT ability[2]; // Status # to call? [5][7]
+	UINT amount[2]; // # to increase/decrease by? [6][8]
+	UINT decrease; // 1: decrease 0: increase [17]
 };
 
 
 // -----------------------------------------------------------------------------------------
 // Sell data object
 // -----------------------------------------------------------------------------------------
-struct CSellData
-{
+struct CSellData {
 	unsigned id;
 	CItem items[48];
 };
@@ -938,18 +916,16 @@ struct CSellData
 // -----------------------------------------------------------------------------------------
 // User skill info
 // -----------------------------------------------------------------------------------------
-struct CSkill
-{
+struct CSkill {
 	unsigned id;
 	unsigned level;
-	CSkills* thisskill;
+	CSkills *thisskill;
 };
 
 // -----------------------------------------------------------------------------------------
 // An item or zuly dropped on the ground
 // -----------------------------------------------------------------------------------------
-struct CDrop
-{
+struct CDrop {
 	unsigned short clientid;
 	unsigned char posMap;
 	fPoint pos;
@@ -958,21 +934,19 @@ struct CDrop
 	CItem item;
 	time_t droptime;
 	unsigned short owner;
-    class CParty* thisparty;
+	class CParty *thisparty;
 };
 
 // -----------------------------------------------------------------------------------------
 // pvp zones
 // -----------------------------------------------------------------------------------------
-struct CPVPZones
-{
-    int map;
+struct CPVPZones {
+	int map;
 };
 // -----------------------------------------------------------------------------------------
 // A teleport gate object
 // -----------------------------------------------------------------------------------------
-struct CTeleGate
-{
+struct CTeleGate {
 	unsigned short id;
 	fPoint src;
 	unsigned char srcMap;
@@ -983,8 +957,7 @@ struct CTeleGate
 // -----------------------------------------------------------------------------------------
 // A respawn point object
 // -----------------------------------------------------------------------------------------
-struct CRespawnPoint
-{
+struct CRespawnPoint {
 	unsigned short id;
 	fPoint dest;
 	unsigned char destMap;
@@ -995,8 +968,7 @@ struct CRespawnPoint
 // -----------------------------------------------------------------------------------------
 // A monster spawn zone
 // -----------------------------------------------------------------------------------------
-struct CSpawnArea
-{
+struct CSpawnArea {
 	UINT id;
 	UINT map;
 	UINT min;
@@ -1005,185 +977,166 @@ struct CSpawnArea
 	UINT montype;
 	UINT pcount;
 	UINT amon;
-	fPoint* points;
+	fPoint *points;
 	clock_t lastRespawnTime;
-	CNPCData* thisnpc;
-	CMDrops* mobdrop;
-	CMDrops* mapdrop;
+	CNPCData *thisnpc;
+	CMDrops *mobdrop;
+	CMDrops *mapdrop;
 };
 
 #ifdef USEIFO
 struct CMob {
-  UINT id;
-  UINT mobId;
-  bool tactical;
-  UINT amount;
-  CNPCData* thisnpc;
-	CMDrops* mobdrop;
-	CMDrops* mapdrop;
+	UINT id;
+	UINT mobId;
+	bool tactical;
+	UINT amount;
+	CNPCData *thisnpc;
+	CMDrops *mobdrop;
+	CMDrops *mapdrop;
 };
 
 struct CMobGroup {
-  UINT id;
-  UINT map;
-  UINT limit;
-  UINT active;
-  UINT tacticalpoints;
-  UINT respawntime;
-  UINT basicKills;
-  UINT curTac;
-  UINT curBasic;
-  fPoint point;
-  UINT range;
-  clock_t lastRespawnTime;
-  vector<CMob*> basicMobs;
-  vector<CMob*> tacMobs;
+	UINT id;
+	UINT map;
+	UINT limit;
+	UINT active;
+	UINT tacticalpoints;
+	UINT respawntime;
+	UINT basicKills;
+	UINT curTac;
+	UINT curBasic;
+	fPoint point;
+	UINT range;
+	clock_t lastRespawnTime;
+	vector<CMob *> basicMobs;
+	vector<CMob *> tacMobs;
 };
 #endif
 
-struct CUseInfo
-{
-    int itemnum;
-    int itemtype;
-    int usescript;
-    int usetype;
-    int usevalue;
+struct CUseInfo {
+	int itemnum;
+	int itemtype;
+	int usescript;
+	int usetype;
+	int usevalue;
 };
 
-struct CItemType
-{
-    int itemnum;
-    int itemtype;
-    int probability;
+struct CItemType {
+	int itemnum;
+	int itemtype;
+	int probability;
 };
 
-struct CItemSlot
-{
-    UINT newslot[2];
-    UINT nslot;
-    bool flag;
+struct CItemSlot {
+	UINT newslot[2];
+	UINT nslot;
+	bool flag;
 };
 
 // Buying List (Shop)
-struct CBuying
-{
-    CItem item;
-    long int price;
-    UINT slot;
-    UINT count;
+struct CBuying {
+	CItem item;
+	long int price;
+	UINT slot;
+	UINT count;
 };
 
 // Selling List (Shop)
-struct CSelling
-{
-    UINT slot;
-    UINT count;
-    long int price;
+struct CSelling {
+	UINT slot;
+	UINT count;
+	long int price;
 };
 
 // MONSTER <---------------------------
-struct MPosition // Monster position
-{
-    UINT Map;
-    UINT SpawnID;
-    fPoint Spos; // Start position
-    fPoint Cpos; // Current Position
-    fPoint Dpos; // destiny  Position
+struct MPosition { // Monster position
+	UINT Map;
+	UINT SpawnID;
+	fPoint Spos; // Start position
+	fPoint Cpos; // Current Position
+	fPoint Dpos; // destiny  Position
 };
 
-struct MDrop    // monster drops
-{
-    bool drop;
-    unsigned int firsthit;
-    unsigned int firstlevel;
-	CMDrops* mobdrop;
-	CMDrops* mapdrop;
+struct MDrop {  // monster drops
+	bool drop;
+	unsigned int firsthit;
+	unsigned int firstlevel;
+	CMDrops *mobdrop;
+	CMDrops *mapdrop;
 };
 
-struct CBValue
-{
-    UINT NewValue;
-    UINT Value;
-    UINT Position;
+struct CBValue {
+	UINT NewValue;
+	UINT Value;
+	UINT Position;
 };
 
 
 // ITEMS
-struct CEquipList
-{
-    CEquip *Index[5000];
-    vector<CEquip*> Data;
-    CEquip* nullequip;
+struct CEquipList {
+	CEquip *Index[5000];
+	vector<CEquip *> Data;
+	CEquip *nullequip;
 };
 
-struct CJemList
-{
-    CJemData *Index[4000];
-    vector<CJemData*> Data;
-    CJemData* nulljem;
+struct CJemList {
+	CJemData *Index[4000];
+	vector<CJemData *> Data;
+	CJemData *nulljem;
 };
 
-struct CNaturalList
-{
-    CNaturalData *Index[1000];
-    vector<CNaturalData*> Data;
-    CNaturalData* nullnatural;
+struct CNaturalList {
+	CNaturalData *Index[1000];
+	vector<CNaturalData *> Data;
+	CNaturalData *nullnatural;
 };
 
 
-struct CPatList
-{
-    CPatData *Index[1000];
-    vector<CPatData*> Data;
-    CPatData* nullpat;
+struct CPatList {
+	CPatData *Index[1000];
+	vector<CPatData *> Data;
+	CPatData *nullpat;
 };
 
-struct CProductList
-{
-    CProductData* Index[2000];
-    vector<CProductData*> Data;
-    CProductData* nullproduct;
+struct CProductList {
+	CProductData *Index[2000];
+	vector<CProductData *> Data;
+	CProductData *nullproduct;
 };
 
-struct CSellList
-{
-    CCSellData* Index[1000];
-    vector<CCSellData*> Data;
-    CCSellData* nullsell;
+struct CSellList {
+	CCSellData *Index[1000];
+	vector<CCSellData *> Data;
+	CCSellData *nullsell;
 };
 
-struct CUseList
-{
-    CUseData* Index[2000];
-    vector<CUseData*> Data;
-    CUseData* nulluse;
+struct CUseList {
+	CUseData *Index[2000];
+	vector<CUseData *> Data;
+	CUseData *nulluse;
 };
 
-struct CMapList
-{
-    class CMap* Index[300];
-    vector<class CMap*> Map;
-    class CMap* nullzone;
+struct CMapList {
+	class CMap *Index[300];
+	vector<class CMap *> Map;
+	class CMap *nullzone;
 };
 
-struct CItemStas
-{
-  UINT stat[2];
-  UINT value[2];
+struct CItemStas {
+	UINT stat[2];
+	UINT value[2];
 };
 
-struct CFairy
-{
-    UINT ListIndex;
+struct CFairy {
+	UINT ListIndex;
 	clock_t LastTime;
-    UINT WaitTime;
-    bool assigned;
+	UINT WaitTime;
+	bool assigned;
 };
 
 // Quests
 
-struct SQuest
-{
+struct SQuest {
 	word QuestID;
 	dword StartTime;
 	word Variables[10];
@@ -1191,34 +1144,43 @@ struct SQuest
 	CItem Items[5];
 	byte unknown[6];
 
-	bool GetSwitchBit( dword switchId ){
+	bool GetSwitchBit(dword switchId) {
 		dword byteId = switchId / 8;
 		dword bitId = switchId % 8;
 		return ((Switches[byteId] >> bitId) & 1);
 	}
 
-	void SetSwitchBit( byte switchId, byte value ){
+	void SetSwitchBit(byte switchId, byte value) {
 		dword byteId = switchId / 8;
 		dword bitId = switchId % 8;
-		Switches[byteId] = Switches[byteId] | ((value?1:0) << bitId);
+		Switches[byteId] = Switches[byteId] | ((value ? 1 : 0) << bitId);
 	}
 
-	void AddItem(CItem* item, byte btOp = 2){
-		for(dword i = 0; i < 6; i++){
-			if(Items[i].GetPakHeader() == item->GetPakHeader()) {
-				if(btOp == 1){
+	void AddItem(CItem *item, byte btOp = 2) {
+		for (dword i = 0; i < 6; i++) {
+			if (Items[i].GetPakHeader() == item->GetPakHeader()) {
+				if (btOp == 1) {
 					Items[i].count += item->count;
 					return;
-				}else if(btOp == 0){
-					if(Items[i].count <= item->count)
+				} else if (btOp == 0) {
+					if (Items[i].count <= item->count) {
 						Items[i].Clear();
-					else
+					} else {
 						Items[i].count -= item->count;
+					}
+
 					return;
 				}
 			}
-			if(btOp == 0) continue;
-			if(Items[i].GetPakHeader() != 0) continue;
+
+			if (btOp == 0) {
+				continue;
+			}
+
+			if (Items[i].GetPakHeader() != 0) {
+				continue;
+			}
+
 			Items[i].itemnum = item->itemnum;
 			Items[i].itemtype = item->itemtype;
 			Items[i].count = item->count;
@@ -1226,14 +1188,13 @@ struct SQuest
 		}
 	}
 
-	void Clear(){
+	void Clear() {
 		memset(this, 0, sizeof(SQuest));
 	}
 
 };
 
-struct SQuestData
-{
+struct SQuestData {
 	word EpisodeVar[5];
 	word JobVar[3];
 	word PlanetVar[7];
@@ -1242,13 +1203,13 @@ struct SQuestData
 	SQuest quests[10];
 	byte flags[0x40];
 
-	void SetFlag( dword flagid, bool value ){
+	void SetFlag(dword flagid, bool value) {
 		dword byteid = flagid / 8;
 		dword bitid = flagid % 8;
-		flags[byteid] = flags[byteid] | ((value?1:0) << bitid);
+		flags[byteid] = flags[byteid] | ((value ? 1 : 0) << bitid);
 	}
 
-	bool GetFlag( dword flagid ){
+	bool GetFlag(dword flagid) {
 		dword byteid = flagid / 8;
 		dword bitid = flagid % 8;
 		return ((flags[byteid] >> bitid) & 1);

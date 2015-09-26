@@ -1,18 +1,38 @@
 // Props to ExJam for this code :D
 #define AICOND(cond) int F_AI_COND_ ## cond (class CWorldServer* server, class CCharacter* entity, byte* raw)
-typedef int (*fpAiCond)(class CWorldServer*, class CCharacter*, byte*);
+typedef int (*fpAiCond)(class CWorldServer *, class CCharacter *, byte *);
 #define GETAICONDDATA(cond) STR_AI_COND_ ## cond * data = (STR_AI_COND_ ## cond *)raw;
 
-AICOND(000);AICOND(001);AICOND(002);
-AICOND(003);AICOND(004);AICOND(005);
-AICOND(006);AICOND(007);AICOND(008);
-AICOND(009);AICOND(010);AICOND(011);
-AICOND(012);AICOND(013);AICOND(014);
-AICOND(015);AICOND(016);AICOND(017);
-AICOND(018);AICOND(019);AICOND(020);
-AICOND(021);AICOND(022);AICOND(023);
-AICOND(024);AICOND(025);AICOND(026);
-AICOND(027);AICOND(028);AICOND(029);
+AICOND(000);
+AICOND(001);
+AICOND(002);
+AICOND(003);
+AICOND(004);
+AICOND(005);
+AICOND(006);
+AICOND(007);
+AICOND(008);
+AICOND(009);
+AICOND(010);
+AICOND(011);
+AICOND(012);
+AICOND(013);
+AICOND(014);
+AICOND(015);
+AICOND(016);
+AICOND(017);
+AICOND(018);
+AICOND(019);
+AICOND(020);
+AICOND(021);
+AICOND(022);
+AICOND(023);
+AICOND(024);
+AICOND(025);
+AICOND(026);
+AICOND(027);
+AICOND(028);
+AICOND(029);
 AICOND(030);
 
 #define AI_COND_COUNT 31
@@ -31,8 +51,10 @@ struct STR_AI_COND_001 {
 struct STR_AI_COND_002 {
 	//Check Near (1) (0x0c bytes)
 	int iDistance;	//Pos: 0x00
-	union{byte btIsAllied;	//Pos: 0x04
-	word nIsAllied;};
+	union {
+		byte btIsAllied;	//Pos: 0x04
+		word nIsAllied;
+	};
 	short nLevelDiff;	//Pos: 0x06
 	short nLevelDiff2;	//Pos: 0x08
 	word wChrNum;	//Pos: 0x0a
@@ -144,8 +166,10 @@ struct STR_AI_COND_019 {
 
 struct STR_AI_COND_020 {
 	//Check AB (4) (0x0c bytes)
-	union{byte btAbType;	//Pos: 0x00
-	dword iAbType;};
+	union {
+		byte btAbType;	//Pos: 0x00
+		dword iAbType;
+	};
 	dword iValue;	//Pos: 0x04
 	byte btOp;	//Pos: 0x08
 };
