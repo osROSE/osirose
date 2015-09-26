@@ -1,1 +1,4 @@
+# Binary is the old directory name. Keeping it here because
+#	people who are updating might want to just ignore it.
 /Binary/
+/build/
