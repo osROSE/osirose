@@ -18,6 +18,7 @@
 
     developed with Main erose/hrose source server + some change from the original eich source
 */
+#include "log.h"
 #include "sockets.h"
 
 // Constructor
@@ -46,7 +47,7 @@ bool CServerSocket::StartServer() {
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (sock == INVALID_SOCKET) {
-		Log(MSG_FATALERROR, "Could not create a socket");
+		Log(msg_type::MSG_FATALERROR, "Could not create a socket");
 		return false;
 	}
 
@@ -54,7 +55,7 @@ bool CServerSocket::StartServer() {
 
 	if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char *)&optval,
 	               sizeof(optval)) == -1) {
-		Log(MSG_ERROR, "setsockopt:SO_KEEPALIVE");
+		Log(msg_type::MSG_ERROR, "setsockopt:SO_KEEPALIVE");
 	}
 
 	setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char *)&optval,
@@ -65,14 +66,14 @@ bool CServerSocket::StartServer() {
 	memset(&(ain.sin_zero), '\0', 8);
 
 	if (bind(sock, (const sockaddr *)&ain, sizeof(struct sockaddr))) {
-		Log(MSG_FATALERROR, "Could not bind socket");
+		Log(msg_type::MSG_FATALERROR, "Could not bind socket");
 		closesocket(sock);
 		sock = INVALID_SOCKET;
 		return false;
 	}
 
 	if (listen(sock, SOMAXCONN) == -1) {
-		Log(MSG_FATALERROR, "Could not listen on socket");
+		Log(msg_type::MSG_FATALERROR, "Could not listen on socket");
 		closesocket(sock);
 		sock = INVALID_SOCKET;
 		return false;
@@ -83,8 +84,12 @@ bool CServerSocket::StartServer() {
 		sckISC = socket(AF_INET, SOCK_STREAM, 0);
 
 		if (sckISC == INVALID_SOCKET) {
-			Log(MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+			Log(msg_type::MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+#ifdef _WIN32
 			    WSAGetLastError());
+#else
+				errno);
+#endif
 			return false;
 		}
 
@@ -92,7 +97,7 @@ bool CServerSocket::StartServer() {
 
 		if (setsockopt(sckISC, SOL_SOCKET, SO_KEEPALIVE, (const char *)&optval,
 		               sizeof(optval)) == -1) {
-			Log(MSG_ERROR, "setsockopt:SO_KEEPALIVE");
+			Log(msg_type::MSG_ERROR, "setsockopt:SO_KEEPALIVE");
 		}
 
 		setsockopt(sckISC, IPPROTO_TCP, TCP_NODELAY, (const char *)&optval,
@@ -103,20 +108,20 @@ bool CServerSocket::StartServer() {
 		memset(&(sain.sin_zero), '\0', 8);
 
 		if (bind(sckISC, (const sockaddr *)&sain, sizeof(struct sockaddr))) {
-			Log(MSG_FATALERROR, "Could not bind socket");
+			Log(msg_type::MSG_FATALERROR, "Could not bind socket");
 			closesocket(sckISC);
 			sckISC = INVALID_SOCKET;
 			return false;
 		}
 
 		if (listen(sckISC, SOMAXCONN) == -1) {
-			Log(MSG_FATALERROR, "Could not listen on socket");
+			Log(msg_type::MSG_FATALERROR, "Could not listen on socket");
 			closesocket(sckISC);
 			sckISC = INVALID_SOCKET;
 			return false;
 		}
 
-		Log(MSG_INFO, "opened ISC poort %i", 29110);
+		Log(msg_type::MSG_INFO, "opened ISC poort %i", 29110);
 	}
 
 	if (LOG_THISSERVER == LOG_WORLD_SERVER) {
@@ -124,8 +129,12 @@ bool CServerSocket::StartServer() {
 		sckISC = socket(AF_INET, SOCK_STREAM, 0);
 
 		if (sckISC == INVALID_SOCKET) {
-			Log(MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+			Log(msg_type::MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+#ifdef _WIN32
 			    WSAGetLastError());
+#else
+				errno);
+#endif
 			return false;
 		}
 
@@ -134,7 +143,11 @@ bool CServerSocket::StartServer() {
 		ain.sin_port		= htons(Config.CharPort); //29110 );
 
 		if (connect(sckISC, (const sockaddr *)&ain, sizeof(ain)) == SOCKET_ERROR) {
-			Log(MSG_ERROR, "Could not connect to ISC (WSK2 ERROR: %i)", WSAGetLastError());
+#ifdef _WIN32
+			Log(msg_type::MSG_ERROR, "Could not connect to ISC (WSK2 ERROR: %i)", WSAGetLastError());
+#else
+			Log(msg_type::MSG_ERROR, "Could not connect to ISC (WSK2 ERROR: %i)", errno);
+#endif
 			closesocket(sckISC);
 			sckISC = INVALID_SOCKET;
 			return false;
@@ -143,8 +156,12 @@ bool CServerSocket::StartServer() {
 		sckISCII = socket(AF_INET, SOCK_STREAM, 0);
 
 		if (sckISCII == INVALID_SOCKET) {
-			Log(MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+			Log(msg_type::MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+#ifdef _WIN32
 			    WSAGetLastError());
+#else
+				errno);
+#endif
 			return false;
 		}
 
@@ -152,7 +169,7 @@ bool CServerSocket::StartServer() {
 
 		if (setsockopt(sckISCII, SOL_SOCKET, SO_KEEPALIVE, (const char *)&optval,
 		               sizeof(optval)) == -1) {
-			Log(MSG_ERROR, "setsockopt:SO_KEEPALIVE");
+			Log(msg_type::MSG_ERROR, "setsockopt:SO_KEEPALIVE");
 		}
 
 		setsockopt(sckISCII, IPPROTO_TCP, TCP_NODELAY, (const char *)&optval,
@@ -163,29 +180,32 @@ bool CServerSocket::StartServer() {
 		memset(&(sain.sin_zero), '\0', 8);
 
 		if (bind(sckISCII, (const sockaddr *)&sain, sizeof(struct sockaddr))) {
-			Log(MSG_FATALERROR, "Could not bind socket");
+			Log(msg_type::MSG_FATALERROR, "Could not bind socket");
 			closesocket(sckISCII);
 			sckISCII = INVALID_SOCKET;
 			return false;
 		}
 
 		if (listen(sckISCII, SOMAXCONN) == -1) {
-			Log(MSG_FATALERROR, "Could not listen on socket");
+			Log(msg_type::MSG_FATALERROR, "Could not listen on socket");
 			closesocket(sckISCII);
 			sckISCII = INVALID_SOCKET;
 			return false;
 		}
 
-		Log(MSG_INFO, "opened ISC poort %i", Config.WorldsPort); //29210 );
+		Log(msg_type::MSG_INFO, "opened ISC poort %i", Config.WorldsPort); //29210 );
 	}
 
 	if (LOG_THISSERVER == LOG_LOGIN_SERVER) {
-		struct sockaddr_in ain;
 		sckISC = socket(AF_INET, SOCK_STREAM, 0);
 
 		if (sckISC == INVALID_SOCKET) {
-			Log(MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+			Log(msg_type::MSG_ERROR, "Could not create valid ISC socket (WSK2 ERROR: %i)",
+#ifdef _WIN32
 			    WSAGetLastError());
+#else
+				errno);
+#endif
 			return false;
 		}
 	}
@@ -193,14 +213,14 @@ bool CServerSocket::StartServer() {
 	isActive = true;
 
 	if (!this->OnServerReady()) {
-		Log(MSG_FATALERROR, "Server could not start");
+		Log(msg_type::MSG_FATALERROR, "Server could not start");
 		closesocket(sock);
 		sock = INVALID_SOCKET;
 		isActive = false;
 		return false;
 	}
 
-	Log(MSG_INFO, "Server started on port %i and is listening.", port);
+	Log(msg_type::MSG_INFO, "Server started on port %i and is listening.", port);
 	//ISCThread( );
 	ServerLoop();
 	// Nothing past here is ever really called
@@ -235,7 +255,7 @@ bool CClientSocket::ISCThread() {
 			return false;
 		}
 
-		if (recvd == SOCKET_ERROR) {
+		if (recvd == (unsigned) SOCKET_ERROR) {
 			return false;
 		}
 
@@ -249,7 +269,7 @@ bool CClientSocket::ISCThread() {
 			readlen = *((unsigned short *)&buffer[0]);
 
 			if (readlen < 6) {
-				Log(MSG_ERROR, "Invalid server Packet Header");
+				Log(msg_type::MSG_ERROR, "Invalid server Packet Header");
 			}
 
 			if (readlen > 6) {
@@ -311,9 +331,9 @@ void CServerSocket::ServerLoop() {
 
 			if (activity < 0 && errno != EINTR) {
 #ifdef _WIN32
-				Log(MSG_ERROR, "Select command failed. Error #%i", WSAGetLastError());
+				Log(msg_type::MSG_ERROR, "Select command failed. Error #%i", WSAGetLastError());
 #else
-				Log(MSG_ERROR, "Select command failed. Error #%i", errno);
+				Log(msg_type::MSG_ERROR, "Select command failed. Error #%i", errno);
 #endif
 				isActive = false;
 			}
@@ -332,9 +352,9 @@ void CServerSocket::ServerLoop() {
 					AddUser(NewSocket, &ClientInfo, true);
 				} else {
 #ifdef _WIN32
-					Log(MSG_ERROR, "Error accepting socket: %i", WSAGetLastError());
+					Log(msg_type::MSG_ERROR, "Error accepting socket: %i", WSAGetLastError());
 #else
-					Log(MSG_ERROR, "Error accepting socket: %i", errno);
+					Log(msg_type::MSG_ERROR, "Error accepting socket: %i", errno);
 #endif
 				}
 			}
@@ -342,9 +362,9 @@ void CServerSocket::ServerLoop() {
 
 		if (activity < 0 && errno != EINTR) {
 #ifdef _WIN32
-			Log(MSG_ERROR, "Select command failed. Error #%i", WSAGetLastError());
+			Log(msg_type::MSG_ERROR, "Select command failed. Error #%i", WSAGetLastError());
 #else
-			Log(MSG_ERROR, "Select command failed. Error #%i", errno);
+			Log(msg_type::MSG_ERROR, "Select command failed. Error #%i", errno);
 #endif
 			isActive = false;
 		}
@@ -362,9 +382,9 @@ void CServerSocket::ServerLoop() {
 				AddUser(NewSocket, &ClientInfo, false);
 			} else {
 #ifdef _WIN32
-				Log(MSG_ERROR, "Error accepting socket: %i", WSAGetLastError());
+				Log(msg_type::MSG_ERROR, "Error accepting socket: %i", WSAGetLastError());
 #else
-				Log(MSG_ERROR, "Error accepting socket: %i", errno);
+				Log(msg_type::MSG_ERROR, "Error accepting socket: %i", errno);
 #endif
 			}
 		}
@@ -456,7 +476,6 @@ void CServerSocket::AddUser(SOCKET sock, sockaddr_in *ClientInfo, bool server) {
 
 	thisclient->ClientIP = "";
 	thisclient->ClientIP = inet_ntoa(ClientInfo->sin_addr);
-	char *tmp;
 	memset(&thisclient->ClientSubNet, '\0', 12);
 	sprintf(thisclient->ClientSubNet, "%i.%i.%i",
 	        (ClientInfo->sin_addr.s_addr) & 0xFF, (ClientInfo->sin_addr.s_addr >> 8) & 0xFF,
@@ -471,10 +490,10 @@ void CServerSocket::AddUser(SOCKET sock, sockaddr_in *ClientInfo, bool server) {
 
 	if (server == true) {
 		thisclient->isserver = true;
-		Log(MSG_INFO, "Server connected from %s", inet_ntoa(ClientInfo->sin_addr));
+		Log(msg_type::MSG_INFO, "Server connected from %s", inet_ntoa(ClientInfo->sin_addr));
 	} else {
 		thisclient->isserver = false;
-		Log(MSG_INFO, "User connected from %s", inet_ntoa(ClientInfo->sin_addr));
+		Log(msg_type::MSG_INFO, "User connected from %s", inet_ntoa(ClientInfo->sin_addr));
 	}
 }
 
@@ -508,9 +527,9 @@ CClientSocket *CServerSocket::CreateClientSocket() {
 // This function deletes an old client socket
 void CServerSocket::DeleteClientSocket(CClientSocket *thisclient) {
 	if (thisclient->isserver) {
-		Log(MSG_INFO, "Server disconnected");
+		Log(msg_type::MSG_INFO, "Server disconnected");
 	} else {
-		Log(MSG_INFO, "User disconnected");
+		Log(msg_type::MSG_INFO, "User disconnected");
 	}
 
 	delete thisclient;
@@ -538,16 +557,20 @@ void CServerSocket::OnServerDie() {
 
 // This function is called, if a client receives data
 bool CServerSocket::OnReceivePacket(CClientSocket *thisclient, CPacket *P) {
+	(void) thisclient;
+	(void) P;
 	return true;
 }
 
 // This function is called, if a client connects
 bool CServerSocket::OnClientConnect(CClientSocket *thisclient) {
+	(void) thisclient;
 	return true;
 }
 
 // This function is called, if a client disconnects
 void CServerSocket::OnClientDisconnect(CClientSocket *thisclient) {
+	(void) thisclient;
 }
 
 // Raven0123
@@ -556,7 +579,7 @@ void CServerSocket::SendISCPacket(CPacket *pak) {
 }
 
 void CServerSocket::ReceivedISCPacket(CPacket *pak) {
-	Log(MSG_DEBUG, "GOT ISC PACKET (BASESERVER) - 0x%04x %04x", pak->Command,
+	Log(msg_type::MSG_DEBUG, "GOT ISC PACKET (BASESERVER) - 0x%04x %04x", pak->Command,
 	    pak->Size);
 }
 
@@ -570,7 +593,7 @@ bool CServerSocket::DoSQL(char *Format, ...) {
 	retval = mysql_query(mysql, Buffer);
 
 	if (retval != 0) {
-		Log(MSG_ERROR, "MySQL Query Error '%s'", mysql_error(mysql));
+		Log(msg_type::MSG_ERROR, "MySQL Query Error '%s'", mysql_error(mysql));
 	}
 
 	return (retval == 0);

@@ -22,6 +22,7 @@
 
 // Send Server encryption
 bool CLoginServer::pakEncryptionRequest(CLoginClient *thisclient, CPacket *P) {
+	(void) P;
 	try {
 		thisclient->CryptStatus.CurAddValue = rand() | (rand() << 16);
 		STARTPACKET(pak, 0x7FF, 11);
@@ -30,8 +31,9 @@ bool CLoginServer::pakEncryptionRequest(CLoginClient *thisclient, CPacket *P) {
 		thisclient->SendPacket(&pak);
 		return true;
 	} catch (...) {
-		Log(MSG_ERROR, "pakEncryptionRequest");
+		Log(msg_type::MSG_ERROR, "pakEncryptionRequest");
 	}
+	return false; // QIX: guess, nothing else made sense.
 }
 
 // Packet when user login (chck user and pass)
@@ -66,7 +68,7 @@ bool CLoginServer::pakUserLogin(CLoginClient *thisclient, CPacket *P) {
 			if (res == 0) {
 				if (atoi(row[3]) == 1) {
 					// characters is already logged
-					Log(MSG_WARNING, "Account %s try re-login", thisclient->username.c_str());
+					Log(msg_type::MSG_WARNING, "Account %s try re-login", thisclient->username.c_str());
 					ADDBYTE(pak, 4);
 					ADDDWORD(pak, 0);
 					thisclient->SendPacket(&pak);
@@ -100,7 +102,7 @@ bool CLoginServer::pakUserLogin(CLoginClient *thisclient, CPacket *P) {
 						return false;
 					}
 
-					while (row = mysql_fetch_row(result)) {
+					while ((row = mysql_fetch_row(result))) {
 						if (Config.Testserver) {
 							ADDBYTE(pak, 63 + atoi(row[0]));
 						} else {
@@ -134,7 +136,7 @@ bool CLoginServer::pakUserLogin(CLoginClient *thisclient, CPacket *P) {
 					return true;
 				}
 
-				Log(MSG_INFO, "New Account created '%s'", thisclient->username.c_str());
+				Log(msg_type::MSG_INFO, "New Account created '%s'", thisclient->username.c_str());
 			}
 
 			//BAD USERNAME
@@ -151,8 +153,10 @@ bool CLoginServer::pakUserLogin(CLoginClient *thisclient, CPacket *P) {
 		thisclient->SendPacket(&pak);
 		return true;
 	} catch (...) {
-		Log(MSG_ERROR, "Error in pakUserLogin");
+		Log(msg_type::MSG_ERROR, "Error in pakUserLogin");
 	}
+
+	return false; // QIX: guess, nothing else made sense.
 }
 
 // Send server list
@@ -176,7 +180,7 @@ bool CLoginServer::pakGetServers(CLoginClient *thisclient, CPacket *P) {
 		ADDDWORD(pak, servernum);
 		ADDBYTE(pak, (BYTE)mysql_num_rows(result));         //old function
 
-		while (row = mysql_fetch_row(result)) {
+		while ((row = mysql_fetch_row(result))) {
 			UINT connected = atoi(row[2]);
 			UINT maxconnections = atoi(row[3]);
 			BYTE id = atoi(row[0]);
@@ -193,8 +197,10 @@ bool CLoginServer::pakGetServers(CLoginClient *thisclient, CPacket *P) {
 		thisclient->SendPacket(&pak);
 		return true;
 	} catch (...) {
-		Log(MSG_ERROR, "Error in pakGetServers");
+		Log(msg_type::MSG_ERROR, "Error in pakGetServers");
 	}
+
+	return false; // QIX: guess here; nothing else made sense.
 }
 
 // Send server IP
@@ -223,14 +229,14 @@ bool CLoginServer::pakGetIP(CLoginClient *thisclient, CPacket *P) {
 		}
 
 		if (mysql_num_rows(result) != 1) {
-			Log(MSG_WARNING, "Player selected a invalid channel or channel offline");
+			Log(msg_type::MSG_WARNING, "Player selected a invalid channel or channel offline");
 			DB->QFree();
 			return true;
 		}
 
 		row = mysql_fetch_row(result);
-		UINT connected = atoi(row[2]);
-		UINT maxconnections = atoi(row[3]);
+//		UINT connected = atoi(row[2]); QIX: this and below are unused.
+//		UINT maxconnections = atoi(row[3]);
 		ADDBYTE(pak,
 		        0);   //atoi(row[0]) ); // What is status? It's NULL in tables - Drakia
 		ADDDWORD(pak, thisclient->userid);
@@ -242,7 +248,8 @@ bool CLoginServer::pakGetIP(CLoginClient *thisclient, CPacket *P) {
 		thisclient->SendPacket(&pak);
 		return true;
 	} catch (...) {
-		Log(MSG_ERROR, "Error in pakGetIP");
+		Log(msg_type::MSG_ERROR, "Error in pakGetIP");
 	}
+	return false; // QIX: This was a guess. None of the before returns make sense.
 }
 

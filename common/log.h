@@ -6,12 +6,8 @@
 #define __ROSE_LOGGING_FUNCTIONS__
 
 // Log path
-#ifdef _WIN32
+#ifndef LOG_DIRECTORY
 	#define LOG_DIRECTORY "log/"
-#endif
-
-#ifdef __unix__
-	#define LOG_DIRECTORY "/var/log/roseserver/"
 #endif
 
 #define LOG_LOGIN_SERVER		0x01
@@ -33,7 +29,7 @@ extern unsigned char LOG_THISSERVER;
 #define LOG_DEFAULTPACKETS "packets.log"
 
 // Error Types
-enum msg_type {
+enum class msg_type {
 	MSG_NONE,
 	MSG_STATUS,
 	MSG_SQL,
@@ -52,6 +48,6 @@ enum msg_type {
 };
 
 // Logging function
-void Log(msg_type flag, char *Format, ...);
+void Log(msg_type flag, const char *Format, ...);
 
 #endif

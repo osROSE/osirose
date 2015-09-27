@@ -43,8 +43,9 @@ CLoginClient *CLoginServer::CreateClientSocket() {
 		thisclient->GS = this;
 		return thisclient;
 	} catch (...) {
-		Log(MSG_ERROR, "Error in CreateClientSocket");
+		Log(msg_type::MSG_ERROR, "Error in CreateClientSocket");
 	}
+	return NULL;
 }
 
 //loadserver encryption
@@ -55,10 +56,10 @@ void CLoginServer::LoadEncryption() {
 // Delete client socket (free memory)
 void CLoginServer::DeleteClientSocket(CClientSocket *thisclient) {
 	try {
-		Log(MSG_INFO, "User disconnected");
+		Log(msg_type::MSG_INFO, "User disconnected");
 		delete(CLoginClient *)thisclient;
 	} catch (...) {
-		Log(MSG_ERROR, "Error in DeleteClientSocket");
+		Log(msg_type::MSG_ERROR, "Error in DeleteClientSocket");
 	}
 }
 
@@ -74,7 +75,7 @@ void CLoginServer::LoadConfigurations(char *file) {
 		Config.SQLServer.pcServer   = ConfigGetString(file, "mysql_host", "localhost");
 		Config.SQLServer.pcDatabase = ConfigGetString(file, "mysql_database", "irose2");
 		Config.SQLServer.pcUserName = ConfigGetString(file, "mysql_user", "root");
-		Config.SQLServer.pcPassword = ConfigGetString(file, "mysql_pass", "root");
+		Config.SQLServer.pcPassword = ConfigGetString(file, "mysql_pass", "password");
 		Config.SQLServer.pcPort     = ConfigGetInt(file, "mysql_port", 3306);
 		//Server
 		Config.ServerID             = ConfigGetInt(file, "serverid", 0);
@@ -96,7 +97,7 @@ void CLoginServer::LoadConfigurations(char *file) {
 		Config.Testserver           = ConfigGetInt(file, "Testserver",
 		                              1) == 0 ? false : true;
 	} catch (...) {
-		Log(MSG_FATALERROR, "Error parsing configuration file");
+		Log(msg_type::MSG_FATALERROR, "Error parsing configuration file");
 	}
 }
 
@@ -119,7 +120,7 @@ bool CLoginServer::OnReceivePacket(CClientSocket *thisclient, CPacket *P) {
 			return true;
 
 		default:
-			Log(MSG_WARNING,
+			Log(msg_type::MSG_WARNING,
 			    "[%i]Login Server Received unknown packet. Command:%04x Size:%04x",
 			    thisclient->sock, P->Command, P->Size);
 			break;

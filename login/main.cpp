@@ -43,12 +43,12 @@ int main(int argc, char *argv[]) {
 	server->port = server->Config.LoginPort;
 
 	if (server->Config.usethreads) {
-		Log(MSG_INFO, "Using Threads");
+		Log(msg_type::MSG_INFO, "Using Threads");
 	}
 
 	// Start server
 	if (server->DB->Connect() == 0) {
-		Log(MSG_INFO, "Connected to MySQL server");
+		Log(msg_type::MSG_INFO, "Connected to MySQL server");
 	} else {
 		delete server;
 #ifdef _WIN32

@@ -1,9 +1,9 @@
 #ifdef _WIN32
 	#include <conio.h>
 	#include <windows.h>
-	#include <cstdio>
 #endif
 #include <cstdio>
+#include <stdarg.h>
 #include "log.h"
 
 // Basic colors
@@ -37,76 +37,83 @@ void textcolor(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 	                        color + (__BACKGROUND << 4));
 #else
+	(void) color;
+	(void) __BACKGROUND;
+	(void) __FOREGROUND;
 #endif
 }
 
 // This function logs based on flags
-void Log(enum msg_type flag, char *Format, ...) {
+void Log(enum msg_type flag, const char *Format, ...) {
 	va_list ap;	      // For arguments
 	va_start(ap, Format);
 
 	switch (flag) {
-		case MSG_NONE: // direct printf replacement
+		case msg_type::MSG_QUERY:
+		case msg_type::MSG_SDEBUG:
+			break; // QIX: these weren't handled to begin with.
+
+		case msg_type::MSG_NONE: // direct printf replacement
 			textcolor(WHITE);
 			vprintf(Format, ap);
 			break;
 
-		case MSG_STATUS:
+		case msg_type::MSG_STATUS:
 			textcolor(GREEN);
 			printf("[STATUS]: ");
 			break;
 
-		case MSG_SQL:
+		case msg_type::MSG_SQL:
 			textcolor(CYAN);
 			printf("[SQL]: ");
 			break;
 
-		case MSG_INFO:
+		case msg_type::MSG_INFO:
 			textcolor(LIGHTGREEN);
 			printf("[INFO]: ");
 			break;
 
-		case MSG_NOTICE:
+		case msg_type::MSG_NOTICE:
 			textcolor(LIGHTCYAN);
 			printf("[NOTICE]: ");
 			break;
 
-		case MSG_WARNING:
+		case msg_type::MSG_WARNING:
 			textcolor(YELLOW);
 			printf("[WARNING]: ");
 			break;
 
-		case MSG_DEBUG:
+		case msg_type::MSG_DEBUG:
 			textcolor(LIGHTBLUE);
 			printf("[DEBUG]: ");
 			break;
 
-		case MSG_ERROR:
+		case msg_type::MSG_ERROR:
 			textcolor(RED);
 			printf("[ERROR]: ");
 			break;
 
-		case MSG_FATALERROR:
+		case msg_type::MSG_FATALERROR:
 			textcolor(LIGHTRED);
 			printf("[FATAL ERROR]: ");
 			break;
 
-		case MSG_HACK:
+		case msg_type::MSG_HACK:
 			textcolor(LIGHTRED);
 			printf("[HACK]: ");
 			break;
 
-		case MSG_LOAD:
+		case msg_type::MSG_LOAD:
 			textcolor(BROWN);
 			printf("[LOADING]: ");
 			break;
 
-		case MSG_GMACTION:
+		case msg_type::MSG_GMACTION:
 			textcolor(MAGENTA);
 			printf("[GM ACTION]: ");
 			break;
 
-		case MSG_START:
+		case msg_type::MSG_START:
 			textcolor(MAGENTA);
 			vprintf(Format, ap);
 			printf("\r\n");
@@ -115,9 +122,9 @@ void Log(enum msg_type flag, char *Format, ...) {
 
 	textcolor(LIGHTGRAY);
 
-	if (flag != MSG_QUERY) {
+	if (flag != msg_type::MSG_QUERY) {
 		vprintf(Format, ap);
-		printf((flag == MSG_LOAD) ? "\r" : "\n");
+		printf((flag == msg_type::MSG_LOAD) ? "\r" : "\n");
 	}
 
 	FILE *fh;
@@ -140,7 +147,7 @@ void Log(enum msg_type flag, char *Format, ...) {
 			break;
 	}
 
-	if (flag == MSG_QUERY) {
+	if (flag == msg_type::MSG_QUERY) {
 		if (fh != NULL) {
 			fclose(fh);
 		}

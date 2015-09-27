@@ -37,7 +37,9 @@ void StartSignal() {
 	signal(SIGFPE, HandleSignal);
 	signal(SIGSEGV, HandleSignal);
 	signal(SIGTERM, HandleSignal);
+#ifdef _WIN32
 	signal(SIGBREAK, HandleSignal);
+#endif
 	signal(SIGABRT, HandleSignal);
 }
 
@@ -47,14 +49,16 @@ void StopSignal() {
 	signal(SIGFPE, 0);
 	signal(SIGSEGV, 0);
 	signal(SIGTERM, 0);
+#ifdef _WIN32
 	signal(SIGBREAK, 0);
+#endif
 	signal(SIGABRT, 0);
 }
 
 void HandleSignal(int num) {
 	switch (num) {
 		case SIGINT:/* Interactive attention */
-			Log(MSG_ERROR, "Signal received: SIGINT");
+			Log(msg_type::MSG_ERROR, "Signal received: SIGINT");
 #ifdef _WIN32
 			Sleep(1000);
 #else
@@ -64,7 +68,7 @@ void HandleSignal(int num) {
 			break;
 
 		case SIGILL:/* Illegal instruction */
-			Log(MSG_ERROR,
+			Log(msg_type::MSG_ERROR,
 			    "Signal received: SIGILL, Server will be closed, Trying to save...");
 			GServer->isActive = false;
 #ifdef _WIN32
@@ -76,14 +80,14 @@ void HandleSignal(int num) {
 			break;
 
 		case SIGFPE:/* Floating point error */
-			Log(MSG_ERROR,
+			Log(msg_type::MSG_ERROR,
 			    "Signal received: SIGFPE, Server will be closed, Trying to save...");
 			GServer->isActive = false;
 			raise(num);
 			break;
 
 		case SIGSEGV:/* Segmentation violation */
-			Log(MSG_ERROR,
+			Log(msg_type::MSG_ERROR,
 			    "Signal received: SIGSEGV, Server will be closed, Trying to save...");
 			GServer->isActive = false;
 #ifdef _WIN32
@@ -95,13 +99,13 @@ void HandleSignal(int num) {
 			break;
 
 		case SIGTERM:/* Termination request */
-			Log(MSG_INFO, "Signal received: SIGTERM, Server will be closed");
+			Log(msg_type::MSG_INFO, "Signal received: SIGTERM, Server will be closed");
 			GServer->isActive = false;
 			break;
 #ifdef _WIN32
 
 		case SIGBREAK:/* Control-break */
-			Log(MSG_INFO, "Signal received: SIGBREAK, Server will be closed");
+			Log(msg_type::MSG_INFO, "Signal received: SIGBREAK, Server will be closed");
 			GServer->isActive = false;
 			break;
 #endif

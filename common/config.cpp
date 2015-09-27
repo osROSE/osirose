@@ -14,12 +14,14 @@
 #include <cstdlib>
 #include <ctype.h>
 
+#include "log.h"
+
 // Find the entry
-bool ConfigGetEntry(char *pcFile, char *pcNameMust, char *&pcResult) {
+bool ConfigGetEntry(const char *pcFile, const char *pcNameMust, char **pcResult) {
 	char pcBuffer[ 512 ];
 	char *pcName, *pcPar, *pcPoint;
 	unsigned len;
-	pcResult = 0;
+	*pcResult = 0;
 	// Open file
 	FILE *fh;
 	fh = fopen(pcFile, "r");
@@ -68,8 +70,8 @@ bool ConfigGetEntry(char *pcFile, char *pcNameMust, char *&pcResult) {
 #ifdef _WIN32
 
 		if (!_strcmpi(pcName, pcNameMust)) {
-			pcResult = _strdup(pcPar);
-			pcPoint  = pcResult + strlen(pcPar);
+			*pcResult = _strdup(pcPar);
+			pcPoint  = *pcResult + strlen(pcPar);
 
 			if (*pcPoint == 0) {
 				return true;
@@ -87,8 +89,8 @@ bool ConfigGetEntry(char *pcFile, char *pcNameMust, char *&pcResult) {
 #else
 
 		if (strcasecmp(pcName, pcNameMust) == 0) {
-			pcResult = strdup(pcPar);
-			pcPoint  = pcResult + strlen(pcPar);
+			*pcResult = strdup(pcPar);
+			pcPoint  = (char*) *pcResult + strlen(pcPar);
 
 			if (*pcPoint == 0) {
 				return true;
@@ -114,14 +116,17 @@ bool ConfigGetEntry(char *pcFile, char *pcNameMust, char *&pcResult) {
 // -----------------------------------------------------------------------------------------
 // Returns a text
 // -----------------------------------------------------------------------------------------
-char *ConfigGetString(char *pcFile, char *pcName, char *pcDefault) {
-	char *pcRet, *pcRetReal, *pcRetOld;
+char *ConfigGetString(const char *pcFile, const char *pcName, const char *pcDefault) {
+	char *pcRet = 0, *pcRetReal, *pcRetOld;
 
-	if (!ConfigGetEntry(pcFile, pcName, pcRet)) {
+	Log(msg_type::MSG_DEBUG, "looking");
+	if (!ConfigGetEntry(pcFile, pcName, &pcRet)) {
+		Log(msg_type::MSG_DEBUG, "not found: %s", pcName);
 		return strdup(pcDefault);
 	}
 
 	if (pcRet == 0) {
+		Log(msg_type::MSG_DEBUG, "not found (pcret): %s", pcName);
 		return strdup(pcDefault);
 	}
 
@@ -138,11 +143,11 @@ char *ConfigGetString(char *pcFile, char *pcName, char *pcDefault) {
 }
 
 // Returns a number
-unsigned ConfigGetInt(char *pcFile, char *pcName, unsigned uDefault) {
-	char *pcRet;
+unsigned ConfigGetInt(const char *pcFile, const char *pcName, unsigned uDefault) {
+	char *pcRet = 0;
 	unsigned uRet;
 
-	if (!ConfigGetEntry(pcFile, pcName, pcRet)) {
+	if (!ConfigGetEntry(pcFile, pcName, &pcRet)) {
 		return uDefault;
 	}
 

@@ -9,6 +9,7 @@ set(COMMON_SRC
 	common/socket-base.cpp
 	common/socket-client.cpp
 	common/socket-server.cpp
+	common/database/database.cpp
 )
 
 set(LOGIN_SRC
@@ -41,3 +42,4 @@ else()
 endif()
 
 add_executable(irose-login ${LOGIN_SRC})
+target_link_libraries(irose-login mysqlclient)

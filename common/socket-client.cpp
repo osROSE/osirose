@@ -73,7 +73,7 @@ bool CClientSocket::ReceiveData() {
 
 		// Did we receive an incorrect buffer?
 		if (PacketSize < 6) {
-			Log(MSG_ERROR, "(SID:%i) Client sent incorrect blockheader.", sock);
+			Log(msg_type::MSG_ERROR, "(SID:%i) Client sent incorrect blockheader.", sock);
 			return false;
 		}
 
@@ -87,7 +87,7 @@ bool CClientSocket::ReceiveData() {
 
 	// We received the whole packet - Now we try to decrypt it
 	if (!DecryptBufferData(CryptTable, Buffer)) {
-		Log(MSG_ERROR, "(SID:%i) Client sent illegal block.", sock);
+		Log(msg_type::MSG_ERROR, "(SID:%i) Client sent illegal block.", sock);
 		return false;
 	}
 
@@ -110,7 +110,7 @@ bool CClientSocket::ReceiveData() {
 
 	// Handle actions for this packet
 	if (!GS->OnReceivePacket(this, pak)) {
-		//Log(MSG_ERROR, "onrecieve packet returned false");
+		//Log(msg_type::MSG_ERROR, "onrecieve packet returned false");
 		return false;
 	}
 
@@ -153,12 +153,12 @@ PVOID ClientMainThread(PVOID ClientSocket) {
 		int Select = select(thisplayer->sock + 1, &fds, NULL, NULL, NULL);
 
 		if (Select == SOCKET_ERROR) {
-			Log(MSG_ERROR, NULL, "Error in Select");
+			Log(msg_type::MSG_ERROR, NULL, "Error in Select");
 			thisplayer->isActive = false;
 		} else {
 			if (FD_ISSET(thisplayer->sock, &fds)) {
 				if (thisplayer->isserver == true) {
-					//Log( MSG_INFO,"ISC PACKET");
+					//Log( msg_type::MSG_INFO,"ISC PACKET");
 					thisplayer->ISCThread();
 				} else if (!thisplayer->ReceiveData()) {
 					thisplayer->isActive = false;

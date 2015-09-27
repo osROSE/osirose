@@ -22,15 +22,14 @@
 #define __ROSE_SOCKETS__
 #define USEIFO
 #ifdef _WIN32
-
 	#include <windows.h>
+	#include <winsock2.h>
 	#define close closesocket
 	#ifdef FD_SETSIZE
 		#undef FD_SETSIZE
 	#endif
 	#define FD_SETSIZE	1024
 #else
-	#include <winsock2.h>
 	#include <unistd.h>
 	#include <netinet/in.h>
 	#include <sys/socket.h>
@@ -46,6 +45,9 @@
 	#define ioctlsocket ioctl
 	#define SOCKADDR struct sockaddr
 	#define closesocket close
+#endif
+#ifndef TCP_NODELAY
+	#define TCP_NODELAY 0
 #endif
 #include <mysql/mysql.h>
 #include <cstdio>
@@ -63,11 +65,13 @@
 #include <pthread.h>
 #include <vector>
 #include <csignal>
+#include <stdint.h>
 #include "log.h"
 #include "rosecrypt.hpp"
 #include "config.h"
 #include "database/database.h"
 // Just some defs for easier use
+typedef unsigned int UINT;
 typedef char SBYTE;
 typedef unsigned char BYTE;
 typedef short SWORD;
@@ -76,10 +80,10 @@ typedef long SDWORD;
 typedef unsigned long DWORD;
 typedef long long SQWORD;
 typedef unsigned long long QWORD;
-typedef unsigned __int8			byte;
-typedef unsigned __int16		word;
-typedef unsigned __int32		dword;
-typedef unsigned __int64		qword;
+typedef uint8_t			byte;
+typedef uint16_t		word;
+typedef uint32_t		dword;
+typedef uint64_t		qword;
 typedef char					*strings;
 using std::cout;
 using std::endl;
@@ -149,7 +153,8 @@ struct CPacket {
 		Size += sizeof(T);
 	}
 	void AddString(char *value, bool NullTerminate) {
-		for (dword i = 0; i < strlen((const char *)value); i++) {
+		(void) NullTerminate;
+		for (dword i = 0; i < (dword) strlen((const char *)value); i++) {
 			Add<byte>(value[i]);
 		}
 

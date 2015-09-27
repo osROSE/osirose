@@ -52,10 +52,12 @@ const unsigned char CheckSumTable[] =
 //----------------------------------------------------------------------------
 unsigned ctGenerateNextValue(CCryptTable *CryptTables,
                              CCryptTableControlStruct *ControlStruct) {
+    (void) CryptTables;
 	// Get the last value depending on the current TableMod.
 	int Value = ControlStruct->ValueTableMod[ ControlStruct->CurTableMod ];
 	// Update generatecount, depending on the current TableMod
-	ControlStruct->CountTableMod            [ ControlStruct->CurTableMod ];
+	auto tmp = ControlStruct->CountTableMod            [ ControlStruct->CurTableMod ]; // QIX: Unsure what was intended here.
+	(void) tmp;
 
 	// Calculate and return the next value
 	switch (ControlStruct->CurTableMod) {
@@ -236,7 +238,8 @@ void GenerateLoginServerCryptTables(CCryptTable *&CryptTables) {
 
 	do {
 		// Generate next value for table
-		ControlStruct.CountTableMod[1];
+		auto tmp = ControlStruct.CountTableMod[1]; // QIX: removed; not sure what was intended here...
+		(void) tmp;
 		ivalue  = ControlStruct.ValueTableMod[1];
 		ivalue *= 0x3E39B193;
 		value   = (0x3039 - (unsigned)ivalue) & 0x7FFFFFFF;

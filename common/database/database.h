@@ -17,10 +17,10 @@ public:
 	int Connect();
 	int Reconnect();
 	void Disconnect();
-	bool QExecute(char *format, ...);
-	MYSQL_RES *QUse(char *format, ...);
-	MYSQL_RES *QStore(char *format, ...);
-	bool DoSQL(char *Format, ...);
+	bool QExecute(const char *format, ...);
+	MYSQL_RES *QUse(const char *format, ...);
+	MYSQL_RES *QStore(const char *format, ...);
+	bool DoSQL(const char *Format, ...);
 	void QFree();
 	bool Ping();
 
