@@ -1,0 +1,38 @@
+# Not actually referenced by the server, but can be used
+#   to set up defaults
+common: &DEFAULT
+  db: &LOCALDB
+    host: 127.0.0.1
+    port: 3306
+    db:   rose
+    user: rose
+    pass: password
+  ip: 127.0.0.1
+  subnet: 255.255.255.0
+
+# Login server information
+#   by default, uses common.db
+login:
+  <<: *DEFAULT
+  id: 0
+  port: 29000
+  name: Login Server
+  connection: 2
+  password: 789456
+
+  accessLevel: 100
+  createOnLogin: true
+  useThreads: false
+  testServer: false
+
+# Char server information
+#   by default, uses common.db
+character:
+  <<: *DEFAULT
+  password: 456123
+
+# World server information
+#   by default, uses common.db
+world:
+  <<: *DEFAULT
+  password: 321654

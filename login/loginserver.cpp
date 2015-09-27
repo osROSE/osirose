@@ -21,9 +21,8 @@
 #include "loginserver.h"
 
 // Constructor
-CLoginServer::CLoginServer(string fn) {
-	filename = fn;
-	LoadConfigurations((char *)filename.c_str());
+CLoginServer::CLoginServer() {
+	LoadConfigurations();
 	GServer = this;
 }
 
@@ -69,33 +68,37 @@ bool CLoginServer::OnServerReady() {
 }
 
 // Load Server configuration
-void CLoginServer::LoadConfigurations(char *file) {
+void CLoginServer::LoadConfigurations() {
 	try {
+		// QIX: have to strdup here because somebody didn't use std::string...
+		#define CnfStr(def, path) const_cast<char*>(strdup(Cnf["login"] path.as<string>(def).c_str()))
+
 		//Database
-		Config.SQLServer.pcServer   = ConfigGetString(file, "mysql_host", "localhost");
-		Config.SQLServer.pcDatabase = ConfigGetString(file, "mysql_database", "irose2");
-		Config.SQLServer.pcUserName = ConfigGetString(file, "mysql_user", "root");
-		Config.SQLServer.pcPassword = ConfigGetString(file, "mysql_pass", "password");
-		Config.SQLServer.pcPort     = ConfigGetInt(file, "mysql_port", 3306);
+		Config.SQLServer.pcServer   = CnfStr("localhost", ["db"]["host"]);
+		Config.SQLServer.pcDatabase = CnfStr("rose", ["db"]["db"]);
+		Config.SQLServer.pcUserName = CnfStr("rose", ["db"]["user"]);
+		Config.SQLServer.pcPassword = CnfStr("password", ["db"]["pass"]);
+		Config.SQLServer.pcPort     = Cnf["db"]["port"].as<int>(3306);
+
 		//Server
-		Config.ServerID             = ConfigGetInt(file, "serverid", 0);
+		Config.ServerID             = Cnf["login"]["id"].as<int>(0);
 		Config.ServerType           = 0; // Login is always 0
-		Config.LoginIP              = ConfigGetString(file, "serverip", "127.0.0.1");
-		Config.LoginPort            = ConfigGetInt(file, "serverport", 29000);
-		Config.ServerName           = ConfigGetString(file, "servername",
-		                              "Loginserver");
+		Config.LoginIP              = CnfStr("127.0.0.1", ["ip"]);
+		Config.LoginPort            = Cnf["login"]["port"].as<int>(29000);
+		Config.ServerName           = CnfStr("LoginServer", ["name"]);
+
 		//Passwords
-		Config.LoginPass            = ConfigGetInt(file, "loginpass", 123456);
-		Config.CharPass             = ConfigGetInt(file, "charpass", 123456);
-		Config.WorldPass            = ConfigGetInt(file, "worldpass", 123456);
+		Config.LoginPass            = Cnf["login"]["password"].as<int>(123456);
+		Config.CharPass             = Cnf["character"]["password"].as<int>(123456);
+		Config.WorldPass            = Cnf["world"]["password"].as<int>(123456);
+
 		//Login
-		Config.MinimumAccessLevel   = ConfigGetInt(file, "accesslevel", 100);
-		Config.usethreads           = ConfigGetInt(file, "usethreads",
-		                              0) == 0 ? false : true;
-		Config.CreateLoginAccount   = ConfigGetInt(file, "CreateLoginAccount",
-		                              0) == 0 ? false : true;
-		Config.Testserver           = ConfigGetInt(file, "Testserver",
-		                              1) == 0 ? false : true;
+		Config.MinimumAccessLevel   = Cnf["login"]["accessLevel"].as<int>(100);
+		Config.usethreads           = Cnf["login"]["useThreads"].as<bool>(false);
+		Config.CreateLoginAccount   = Cnf["login"]["createOnLogin"].as<bool>(true);
+		Config.Testserver           = Cnf["login"]["testServer"].as<bool>(false);
+
+		#undef CnfStr
 	} catch (...) {
 		Log(msg_type::MSG_FATALERROR, "Error parsing configuration file");
 	}

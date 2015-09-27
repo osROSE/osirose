@@ -24,16 +24,11 @@ unsigned char LOG_THISSERVER = 0;
 class CLoginServer *GServer;
 
 // Main Funtion
-int main(int argc, char *argv[]) {
+int main(void) {
 	LOG_THISSERVER = LOG_LOGIN_SERVER;
 	InitWinSocket();
-	string fileconf = "loginserver.conf";
 
-	if (argc > 1) {
-		fileconf = argv[1];
-	}
-
-	CLoginServer *server = new(nothrow) CLoginServer(fileconf);
+	CLoginServer *server = new(nothrow) CLoginServer();
 	MYSQL mysql;
 	server->DB = new CDatabase(server->Config.SQLServer.pcServer,
 	                           server->Config.SQLServer.pcUserName,

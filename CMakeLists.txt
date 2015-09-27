@@ -42,4 +42,4 @@ else()
 endif()
 
 add_executable(irose-login ${LOGIN_SRC})
-target_link_libraries(irose-login mysqlclient)
+target_link_libraries(irose-login mysqlclient yaml-cpp)

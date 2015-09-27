@@ -1,24 +1,32 @@
-/*******************************************************************************************
-      ___  ___  ___ ___
-    ___| _ \/ _ \/ __| __|
-    / -_)   / (_) \__ \ _|
-    \___|_|_\\___/|___/___|
+#ifndef COMMON_CONFIG_H__
+#define COMMON_CONFIG_H__
+#pragma once
+/*
+	iROSE Configuration Reduex
+	by Qix
 
-    eROSE Server Develped by Brett19.
-    hROSE Team: Brett19 and bdaan
-    Year: 2006
-    Release Date: Summer-Winter 2006
-*******************************************************************************************/
-#ifndef __ROSE_CONFIG_FUNCTIONS__
-#define __ROSE_CONFIG_FUNCTIONS__
+	Because the last config system has been bugging me since I was about 14.
 
-// -----------------------------------------------------------------------------------------
-// Config load functions
-// -----------------------------------------------------------------------------------------
-char *ConfigGetString(const char *pcFile, const char *pcName, const char *pcDefault);
-unsigned ConfigGetInt(const char *pcFile, const char *pcName, unsigned uDefault);
+	Sorry, but you *will* need to update your config files. New format is YAML.
 
-// -----------------------------------------------------------------------------------------
+	This class is NOT written how I would normally write code; it is written
+	in such a way as to easily replace the existing config code.
+*/
+
+#include <yaml-cpp/yaml.h>
+
+#define Cnf RoseConfig::get()
+
+class RoseConfig {
+public:
+	static YAML::Node &get();
+
+private:
+	static void ensure();
+
+	static bool loaded;
+	static YAML::Node config;
+};
+
 
 #endif
-

@@ -40,7 +40,7 @@ public:
 // Server class
 class CLoginServer : public CServerSocket {
 public:
-	CLoginServer(string);     // Constructor
+	CLoginServer();     // Constructor
 	~CLoginServer();                          // Destructor
 
 	//Functions
@@ -49,7 +49,7 @@ public:
 	void LoadEncryption();
 	bool OnReceivePacket(CClientSocket *thisclient, CPacket *P);
 	bool OnServerReady(void);
-	void LoadConfigurations(char *);
+	void LoadConfigurations();
 	bool Ping();
 	// Packets
 	bool pakEncryptionRequest(CLoginClient *thisclient, CPacket *P);
@@ -59,7 +59,6 @@ public:
 	bool pakGetIP(CLoginClient *thisclient, CPacket *P);
 
 	// Variables
-	string   filename;
 	vector<CServers *>          ServerList;           // list of channels;
 
 	CDatabase *DB;
